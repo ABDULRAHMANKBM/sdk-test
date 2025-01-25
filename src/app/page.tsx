@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk"; // Import ZoomMtg type
 
 export default function ZoomComponent() {
-  const authEndpoint = "http://localhost:3001/signature/generate-signature";
+  const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
   const meetingNumber = "85834999284";
   const passWord = "hhSWR1";
