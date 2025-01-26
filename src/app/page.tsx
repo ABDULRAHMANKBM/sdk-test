@@ -80,16 +80,12 @@ export default function ZoomComponent() {
     getSignature();
   };
 
-  const determineRole = (email: string): number | null => {
-    // Logic to determine the role based on email
-    // Example: Admins have role 1, others have role 0
-    if (email.endsWith("@admin.com")) {
-      return 1;
-    } else if (email.endsWith("@user.com")) {
-      return 0;
-    } else {
-      return null; // Invalid email
+  const determineRole = (email: string): number => {
+    // Host email logic
+    if (email === "abdulrahman.kbm02@gmail.com") {
+      return 1; // Host role
     }
+    return 0; // Participant role
   };
 
   return (
