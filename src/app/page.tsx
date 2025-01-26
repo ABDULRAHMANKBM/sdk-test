@@ -6,11 +6,11 @@ import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk"; // Import ZoomMt
 export default function ZoomComponent() {
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
-  const meetingNumber = "85025148599";
-  const passWord = "B885CE";
+  const meetingNumber = "88432619928";
+  const passWord = "be6Mte";
   const role = 1;
   const userName = "ABD";
-  const leaveUrl = "https://sdk-test-5h1iuxbpz-abdulrahman-kbms-projects.vercel.app";
+  const leaveUrl = "https://www.zoom.com/";
 
   useEffect(() => {
     if (typeof window !== "undefined") {
