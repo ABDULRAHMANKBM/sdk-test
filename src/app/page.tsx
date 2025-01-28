@@ -9,14 +9,15 @@ export default function ZoomComponent() {
   const meetingNumber = "89011232582";
   const passWord = "69siJS";
   const leaveUrl = "https://www.zoom.com/";
-  
+
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [role, setRole] = useState<number | null>(null);
   const [error, setError] = useState("");
 
   const handleJoin = async () => {
-    if (!email) {
-      setError("Please enter a valid email.");
+    if (!email || !username) {
+      setError("Please enter a valid username and email.");
       return;
     }
 
@@ -57,7 +58,8 @@ export default function ZoomComponent() {
         success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
-            userName: email, // Use email as userName
+            userName: username, // Use username instead of email as the display name
+            userEmail: email, // Add email for Zoom metadata
             signature: signature,
             sdkKey: sdkKey,
             passWord: passWord,
@@ -97,6 +99,16 @@ export default function ZoomComponent() {
           handleJoin();
         }}
       >
+        <div>
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
         <div>
           <label htmlFor="email">Email:</label>
           <input
