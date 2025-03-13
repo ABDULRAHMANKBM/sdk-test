@@ -3,8 +3,6 @@
 
 import { useState } from "react";
 import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
-@import "@zoom/meetingsdk/dist/css/bootstrap.css";
-@import "@zoom/meetingsdk/dist/css/react-select.css";
 
 
 export default function ZoomComponent() {
