@@ -1,134 +1,135 @@
-"use client";
+// pure client view
+// "use client";
 
-import { useState } from "react";
-import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
+// import { useState } from "react";
+// import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
 
-export default function ZoomComponent() {
-  const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
-  // const sdkKey = "dmanBmjRTDWXyzi8AoROIw";
-  const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
-  const meetingNumber = "89673134606";
-  // const meetingNumber = "89011232582";
-  const passWord = "0Se1T3";
-  const leaveUrl = "https://www.zoom.com/";
+// export default function ZoomComponent() {
+//   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
+//   // const sdkKey = "dmanBmjRTDWXyzi8AoROIw";
+//   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
+//   const meetingNumber = "89673134606";
+//   // const meetingNumber = "89011232582";
+//   const passWord = "0Se1T3";
+//   const leaveUrl = "https://www.zoom.com/";
 
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [role, setRole] = useState<number | null>(null);
-  const [error, setError] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [username, setUsername] = useState("");
+//   const [role, setRole] = useState<number | null>(null);
+//   const [error, setError] = useState("");
 
-  const handleJoin = async () => {
-    if (!email || !username) {
-      setError("Please enter a valid username and email.");
-      return;
-    }
+//   const handleJoin = async () => {
+//     if (!email || !username) {
+//       setError("Please enter a valid username and email.");
+//       return;
+//     }
 
-    // Determine role based on email
-    const userRole = determineRole(email);
-    setRole(userRole);
+//     // Determine role based on email
+//     const userRole = determineRole(email);
+//     setRole(userRole);
 
-    if (userRole === null) {
-      setError("Invalid email. Cannot determine role.");
-      return;
-    }
+//     if (userRole === null) {
+//       setError("Invalid email. Cannot determine role.");
+//       return;
+//     }
 
-    setError("");
+//     setError("");
 
-    // Dynamically import Zoom SDK and start meeting
-    const { ZoomMtg } = await import("@zoom/meetingsdk");
-    ZoomMtg.preLoadWasm();
-    ZoomMtg.prepareWebSDK();
+//     // Dynamically import Zoom SDK and start meeting
+//     const { ZoomMtg } = await import("@zoom/meetingsdk");
+//     ZoomMtg.preLoadWasm();
+//     ZoomMtg.prepareWebSDK();
 
-    const getSignature = async () => {
-      try {
-        const response = await fetch(authEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ meetingNumber, role: userRole }),
-        });
-        const { signature } = await response.json();
-        startMeeting(ZoomMtg, signature);
-      } catch (err) {
-        console.error("Error fetching signature:", err);
-        setError("Failed to fetch the meeting signature.");
-      }
-    };
+//     const getSignature = async () => {
+//       try {
+//         const response = await fetch(authEndpoint, {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({ meetingNumber, role: userRole }),
+//         });
+//         const { signature } = await response.json();
+//         startMeeting(ZoomMtg, signature);
+//       } catch (err) {
+//         console.error("Error fetching signature:", err);
+//         setError("Failed to fetch the meeting signature.");
+//       }
+//     };
 
-    const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
-      ZoomMtg.init({
-        leaveUrl: leaveUrl,
-        showMeetingHeader: true, // Always show header with controls (participants, chat)
-          isSupportAV: true, // Enable audio-video
-        success: () => {
-          ZoomMtg.join({
-            meetingNumber: meetingNumber,
-            userName: username, // Use username instead of email as the display name
-            userEmail: email, // Add email for Zoom metadata
-            signature: signature,
-            sdkKey: sdkKey,
-            success: (res: unknown) => {
-              console.log("Join meeting success", res);
-            },
-            error: (err: unknown) => {
-              console.error("Error joining meeting", err);
-              setError("Failed to join the meeting.");
-            },
-          });
-        },
-        error: (err: unknown) => {
-          console.error("Error initializing Zoom SDK", err);
-          setError("Failed to initialize Zoom SDK.");
-        },
-      });
-    };
+//     const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
+//       ZoomMtg.init({
+//         leaveUrl: leaveUrl,
+//         showMeetingHeader: true, // Always show header with controls (participants, chat)
+//           isSupportAV: true, // Enable audio-video
+//         success: () => {
+//           ZoomMtg.join({
+//             meetingNumber: meetingNumber,
+//             userName: username, // Use username instead of email as the display name
+//             userEmail: email, // Add email for Zoom metadata
+//             signature: signature,
+//             sdkKey: sdkKey,
+//             success: (res: unknown) => {
+//               console.log("Join meeting success", res);
+//             },
+//             error: (err: unknown) => {
+//               console.error("Error joining meeting", err);
+//               setError("Failed to join the meeting.");
+//             },
+//           });
+//         },
+//         error: (err: unknown) => {
+//           console.error("Error initializing Zoom SDK", err);
+//           setError("Failed to initialize Zoom SDK.");
+//         },
+//       });
+//     };
 
-    getSignature();
-  };
+//     getSignature();
+//   };
 
-  const determineRole = (email: string): number => {
-    // Host email logic
-    if (email === "abdulrahman.kbm02@gmail.com") {
-      return 1; // Host role
-    }
-    return 0; // Participant role
-  };
+//   const determineRole = (email: string): number => {
+//     // Host email logic
+//     if (email === "abdulrahman.kbm02@gmail.com") {
+//       return 1; // Host role
+//     }
+//     return 0; // Participant role
+//   };
 
-  return (
-    <div>
-      <h1>Join Zoom Meeting</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleJoin();
-        }}
-      >
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Join Meeting</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <div id="zmmtg-root"></div>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <h1>Join Zoom Meeting</h1>
+//       <form
+//         onSubmit={(e) => {
+//           e.preventDefault();
+//           handleJoin();
+//         }}
+//       >
+//         <div>
+//           <label htmlFor="username">Username:</label>
+//           <input
+//             type="text"
+//             id="username"
+//             value={username}
+//             onChange={(e) => setUsername(e.target.value)}
+//             required
+//           />
+//         </div>
+//         <div>
+//           <label htmlFor="email">Email:</label>
+//           <input
+//             type="email"
+//             id="email"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             required
+//           />
+//         </div>
+//         <button type="submit">Join Meeting</button>
+//       </form>
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+//       <div id="zmmtg-root"></div>
+//     </div>
+//   );
+// }
 
 
 // component view 
@@ -458,3 +459,154 @@ export default function ZoomComponent() {
 //     </div>
 //   );
 // }
+
+
+
+
+// ///////////////////////////////////////////////client view with zoom header /////////////////////////////////////////////////////
+"use client";
+
+import { useState, useEffect } from "react";
+import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
+
+export default function ZoomComponent() {
+  const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
+  const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
+  const meetingNumber = "89673134606";
+  const passWord = "0Se1T3";
+  const leaveUrl = "https://www.zoom.com/";
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState<number | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Listen for external content interactions and ensure meeting header persists
+    const handleExternalContentOpen = () => {
+      // Dynamically check if the current URL contains 'meeting' path
+      if (window.location.href.includes("/meeting")) {
+        // Ensure Zoom SDK and controls are visible
+        const { ZoomMtg } = require("@zoom/meetingsdk");
+        ZoomMtg.setZoomJSLib("https://source.zoom.us/1.9.9/lib", "/av");
+        ZoomMtg.preLoadWasm();
+        ZoomMtg.prepareWebSDK();
+      }
+    };
+
+    // Add event listener for focus events
+    window.addEventListener("focus", handleExternalContentOpen);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("focus", handleExternalContentOpen);
+  }, []);
+
+  const handleJoin = async () => {
+    if (!email || !username) {
+      setError("Please enter a valid username and email.");
+      return;
+    }
+
+    const userRole = determineRole(email);
+    setRole(userRole);
+
+    if (userRole === null) {
+      setError("Invalid email. Cannot determine role.");
+      return;
+    }
+
+    setError("");
+
+    const { ZoomMtg } = await import("@zoom/meetingsdk");
+    ZoomMtg.preLoadWasm();
+    ZoomMtg.prepareWebSDK();
+
+    const getSignature = async () => {
+      try {
+        const response = await fetch(authEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ meetingNumber, role: userRole }),
+        });
+        const { signature } = await response.json();
+        startMeeting(ZoomMtg, signature);
+      } catch (err) {
+        console.error("Error fetching signature:", err);
+        setError("Failed to fetch the meeting signature.");
+      }
+    };
+
+    const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
+      ZoomMtg.init({
+        leaveUrl: leaveUrl,
+        showMeetingHeader: true, // Ensure header stays visible
+        isSupportAV: true, // Enable audio-video
+        success: () => {
+          ZoomMtg.join({
+            meetingNumber: meetingNumber,
+            userName: username,
+            userEmail: email,
+            signature: signature,
+            sdkKey: sdkKey,
+            success: (res: unknown) => {
+              console.log("Join meeting success", res);
+            },
+            error: (err: unknown) => {
+              console.error("Error joining meeting", err);
+              setError("Failed to join the meeting.");
+            },
+          });
+        },
+        error: (err: unknown) => {
+          console.error("Error initializing Zoom SDK", err);
+          setError("Failed to initialize Zoom SDK.");
+        },
+      });
+    };
+
+    getSignature();
+  };
+
+  const determineRole = (email: string): number => {
+    if (email === "abdulrahman.kbm02@gmail.com") {
+      return 1; // Host role
+    }
+    return 0; // Participant role
+  };
+
+  return (
+    <div>
+      <h1>Join Zoom Meeting</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleJoin();
+        }}
+      >
+        <div>
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Join Meeting</button>
+      </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div id="zmmtg-root" style={{ position: "relative" }}></div>
+    </div>
+  );
+}
