@@ -248,7 +248,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -265,6 +264,7 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
   const [error, setError] = useState("");
   const [lines, setLines] = useState<any[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isAnnotationEnabled, setIsAnnotationEnabled] = useState(true); // Toggle annotation state
 
   useEffect(() => {
     const startMeeting = async () => {
@@ -283,6 +283,8 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
 
         ZoomMtg.init({
           leaveUrl,
+          showMeetingHeader: true, // Always show header with controls (participants, chat)
+          isSupportAV: true, // Enable audio-video
           success: () => {
             ZoomMtg.join({
               meetingNumber,
@@ -313,13 +315,14 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
 
   // Annotation Handlers
   const handleMouseDown = (e: any) => {
+    if (!isAnnotationEnabled) return; // Prevent drawing when annotation is disabled
     setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
     setLines([...lines, { points: [pos.x, pos.y] }]);
   };
 
   const handleMouseMove = (e: any) => {
-    if (!isDrawing) return;
+    if (!isDrawing || !isAnnotationEnabled) return; // Prevent drawing when annotation is disabled
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
     const updatedLines = [...lines];
@@ -333,6 +336,10 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
 
   const clearAnnotations = () => {
     setLines([]);
+  };
+
+  const toggleAnnotations = () => {
+    setIsAnnotationEnabled((prev) => !prev); // Toggle annotation state
   };
 
   return (
@@ -359,6 +366,14 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
       {/* Clear Button */}
       <button onClick={clearAnnotations} style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
         Clear Annotations
+      </button>
+
+      {/* Toggle Annotation Button */}
+      <button
+        onClick={toggleAnnotations}
+        style={{ position: "absolute", top: 60, right: 20, zIndex: 10 }}
+      >
+        {isAnnotationEnabled ? "Disable Annotation" : "Enable Annotation"}
       </button>
     </div>
   );
@@ -414,4 +429,3 @@ export default function ZoomComponent() {
     </div>
   );
 }
-
