@@ -1,4 +1,4 @@
-pure client view
+// pure client view
 "use client";
 
 import { useState } from "react";
