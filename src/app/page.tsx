@@ -58,33 +58,36 @@ export default function ZoomComponent() {
     const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
       ZoomMtg.init({
         leaveUrl: leaveUrl,
-  showMeetingHeader: true,
-  isSupportAV: true,
-  disableInvite: false,
-  disableCallOut: true,
-  disableRecord: false,
-  disableJoinAudio: false,
-  audioPanelAlwaysOpen: false,
-  showPureSharingContent: false,
-  isSupportChat: true,
-  isSupportQA: false,
-  isSupportPolling: true,
-  isSupportBreakout: true,
-  screenShare: true,
-  rwcBackup: true,
-  videoDrag: true,
-  sharingMode: 'both',
-  videoHeader: true,
-  isLockBottom: false,
-  isSupportNonverbal: true,
-  isShowJoiningErrorDialog: true,
-  disablePreview: false,
-  disableCORP: true,
-  inviteUrlFormat: '',
-  loginWindow: {
-    width: '400px',
-    height: '600px',
-  },
+      showMeetingHeader: true, // Display the meeting header
+    isSupportAV: true, // Enable audio and video support
+    disableInvite: false, // Allow sending invites
+    disableCallOut: true, // Disable call-out feature
+    disableRecord: false, // Enable recording
+    disableJoinAudio: false, // Allow joining audio
+    audioPanelAlwaysOpen: false, // Keep audio panel closed by default
+    showPureSharingContent: false, // Disable pure sharing content
+    isSupportChat: true, // Enable chat support
+    isSupportQA: false, // Disable Q&A (for webinars)
+    isSupportPolling: true, // Enable polling
+    isSupportBreakout: true, // Enable breakout rooms
+    screenShare: true, // Allow screen sharing
+    // rwcBackup: 'https://your-rwc-backup-url.com', // Provide RWC backup URL (string type required)
+    videoDrag: true, // Allow video dragging
+    sharingMode: 'both', // Support both screen and content sharing
+    videoHeader: true, // Display video header
+    isLockBottom: false, // Allow bottom bar to auto-hide
+    isSupportNonverbal: true, // Enable non-verbal feedback
+    isShowJoiningErrorDialog: true, // Display errors when joining fails
+    disablePreview: false, // Enable preview before joining
+    disableCORP: true, // Disable Cross-Origin Read Blocking
+    inviteUrlFormat: '', // Use the default invite URL format
+    loginWindow: {
+      width: 400, // Set login window width (number type required)
+      height: 600, // Set login window height (number type required)
+    },
+    meetingInfo: ['topic', 'host', 'mn', 'pwd'], // Control what meeting info to display
+    enableHD: true, // Enable HD video
+    externalLinkPage: '', // Custom page for outgoing links (optional)
         success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
