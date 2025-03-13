@@ -81,7 +81,10 @@ export default function ZoomComponent() {
   disablePreview: false,
   disableCORP: true,
   inviteUrlFormat: '',
-  loginWindow: false,
+  loginWindow: {
+    width: '400px',
+    height: '600px',
+  },
         success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
