@@ -484,7 +484,6 @@ export default function ZoomComponent() {
   useEffect(() => {
     // Listen for external content interactions and ensure meeting header persists
     const handleExternalContentOpen = () => {
-      // Dynamically check if the current URL contains 'meeting' path
       if (window.location.href.includes("/meeting")) {
         // Ensure Zoom SDK and controls are visible
         const { ZoomMtg } = require("@zoom/meetingsdk");
@@ -493,11 +492,7 @@ export default function ZoomComponent() {
         ZoomMtg.prepareWebSDK();
       }
     };
-
-    // Add event listener for focus events
     window.addEventListener("focus", handleExternalContentOpen);
-
-    // Cleanup event listener on component unmount
     return () => window.removeEventListener("focus", handleExternalContentOpen);
   }, []);
 
@@ -550,6 +545,8 @@ export default function ZoomComponent() {
             sdkKey: sdkKey,
             success: (res: unknown) => {
               console.log("Join meeting success", res);
+              // Open participants window after joining the meeting
+              openParticipantsWindow();
             },
             error: (err: unknown) => {
               console.error("Error joining meeting", err);
@@ -572,6 +569,28 @@ export default function ZoomComponent() {
       return 1; // Host role
     }
     return 0; // Participant role
+  };
+
+  const openParticipantsWindow = () => {
+    // Open a new window that will display participants
+    const participantsWindow = window.open(
+      "",
+      "ParticipantsWindow",
+      "width=300,height=600,scrollbars=yes"
+    );
+
+    // Populate this window with participant information (or use Zoom's API to get participants)
+    participantsWindow.document.write("<h1>Participants</h1>");
+    participantsWindow.document.write("<ul id='participants-list'></ul>");
+
+    // Example: Update the participants list dynamically (you would hook into the Zoom API for actual participant data)
+    setInterval(() => {
+      const participantsList = participantsWindow.document.getElementById("participants-list");
+      if (participantsList) {
+        // Simulate adding participants (replace with actual data from Zoom SDK)
+        participantsList.innerHTML = "<li>Participant 1</li><li>Participant 2</li>";
+      }
+    }, 2000); // Update participants every 2 seconds
   };
 
   return (
