@@ -81,10 +81,6 @@ export default function ZoomComponent() {
     disablePreview: false, // Enable preview before joining
     disableCORP: true, // Disable Cross-Origin Read Blocking
     inviteUrlFormat: '', // Use the default invite URL format
-    loginWindow: {
-      width: 400, // Set login window width (number type required)
-      height: 600, // Set login window height (number type required)
-    },
     meetingInfo: ['topic', 'host', 'mn', 'pwd'], // Control what meeting info to display
     enableHD: true, // Enable HD video
     externalLinkPage: '', // Custom page for outgoing links (optional)
