@@ -93,6 +93,8 @@ export default function ZoomComponent() {
             sdkKey: sdkKey,
             success: (res: unknown) => {
               console.log("Join meeting success", res);
+              ZoomMtg.showParticipantsWindow();
+        ZoomMtg.showChat();
             },
             error: (err: unknown) => {
               console.error("Error joining meeting", err);
