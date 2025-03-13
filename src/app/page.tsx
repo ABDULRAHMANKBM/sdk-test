@@ -62,7 +62,7 @@ export default function ZoomComponent() {
         sharingMode: "both", // Support both screen and content sharing
         videoHeader: true, // Show video options in the header
         isLockBottom: false, // Unlock the bottom bar
-        showPureSharingContent: false, // Disable pure content sharing
+        showPureSharingContent: true, // Disable pure content sharing
         isSupportChat: true, // Enable chat panel
         isSupportQA: false, // Disable Q&A (for webinars only)
         isSupportPolling: true, // Enable polling feature
