@@ -247,7 +247,6 @@
 //     </div>
 //   );
 // }
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -354,17 +353,33 @@ function ZoomMeeting({ email, username, role }: { email: string; username: strin
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
-        style={{ position: "absolute", top: 0, left: 0, pointerEvents: "auto" }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          pointerEvents: isAnnotationEnabled ? "auto" : "none", // Dynamically change pointerEvents
+        }}
       >
         <Layer>
           {lines.map((line, i) => (
-            <Line key={i} points={line.points} stroke="red" strokeWidth={2} tension={0.5} lineCap="round" lineJoin="round" />
+            <Line
+              key={i}
+              points={line.points}
+              stroke="red"
+              strokeWidth={2}
+              tension={0.5}
+              lineCap="round"
+              lineJoin="round"
+            />
           ))}
         </Layer>
       </Stage>
 
       {/* Clear Button */}
-      <button onClick={clearAnnotations} style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
+      <button
+        onClick={clearAnnotations}
+        style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}
+      >
         Clear Annotations
       </button>
 
@@ -398,11 +413,23 @@ function AuthForm({ onSubmit }: { onSubmit: (email: string, username: string) =>
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="username">Username:</label>
-        <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
       </div>
       <div>
         <label htmlFor="email">Email:</label>
-        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
       </div>
       <button type="submit">Join Meeting</button>
       {error && <p style={{ color: "red" }}>{error}</p>}
