@@ -3,6 +3,9 @@
 
 import { useState } from "react";
 import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
+@import "@zoom/meetingsdk/dist/css/bootstrap.css";
+@import "@zoom/meetingsdk/dist/css/react-select.css";
+
 
 export default function ZoomComponent() {
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
@@ -58,33 +61,28 @@ export default function ZoomComponent() {
     const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
       ZoomMtg.init({
         leaveUrl: leaveUrl,
-      showMeetingHeader: true, // Display the meeting header
-    isSupportAV: true, // Enable audio and video support
-    disableInvite: false, // Allow sending invites
-    disableCallOut: true, // Disable call-out feature
-    disableRecord: false, // Enable recording
-    disableJoinAudio: false, // Allow joining audio
-    audioPanelAlwaysOpen: false, // Keep audio panel closed by default
-    showPureSharingContent: false, // Disable pure sharing content
-    isSupportChat: true, // Enable chat support
-    isSupportQA: false, // Disable Q&A (for webinars)
-    isSupportPolling: true, // Enable polling
-    isSupportBreakout: true, // Enable breakout rooms
-    screenShare: true, // Allow screen sharing
-    // rwcBackup: 'https://your-rwc-backup-url.com', // Provide RWC backup URL (string type required)
-    videoDrag: true, // Allow video dragging
-    sharingMode: 'both', // Support both screen and content sharing
-    videoHeader: true, // Display video header
-    isLockBottom: false, // Allow bottom bar to auto-hide
-    isSupportNonverbal: true, // Enable non-verbal feedback
-    isShowJoiningErrorDialog: true, // Display errors when joining fails
-    disablePreview: false, // Enable preview before joining
-    disableCORP: true, // Disable Cross-Origin Read Blocking
-    inviteUrlFormat: '', // Use the default invite URL format
-    meetingInfo: ['topic', 'host', 'mn', 'pwd'], // Control what meeting info to display
-    enableHD: true, // Enable HD video
-    externalLinkPage: '', // Custom page for outgoing links (optional)
-        success: () => {
+      showMeetingHeader: true, // Display the meeting header (for audio, video, etc.)
+  isSupportAV: true, // Enable audio and video
+  screenShare: true, // Allow screen sharing
+  videoDrag: true, // Allow moving video windows
+  sharingMode: "both", // Support both screen and content sharing
+  videoHeader: true, // Show video options in the header
+  isLockBottom: false, // Unlock the bottom bar
+  showPureSharingContent: false, // Disable pure content sharing
+  isSupportChat: true, // Enable chat panel
+  isSupportQA: false, // Disable Q&A (for webinars only)
+  isSupportPolling: true, // Enable polling feature
+  isSupportBreakout: true, // Enable breakout rooms
+  isSupportNonverbal: true, // Allow non-verbal feedback
+  audioPanelAlwaysOpen: false, // Audio panel should be closed by default
+  isShowJoiningErrorDialog: true, // Show errors if joining fails
+  disableRecord: false, // Allow recording
+  disableInvite: false, // Allow sending meeting invites
+  enableHD: true, // Enable high-definition video
+  isSupportCC: true, // Enable closed captioning
+  meetingInfo: ["topic", "host", "mn", "pwd", "telPwd", "invite", "participant"], // Show essential meeting info
+  inviteUrlFormat: "", // Keep default invite URL
+  externalLinkPage: "", // External link page (optional)        success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
             userName: username, // Use username instead of email as the display name
