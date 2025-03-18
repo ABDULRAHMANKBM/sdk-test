@@ -146,7 +146,7 @@ export default function ZoomComponent() {
         <button type="submit">Join Meeting</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div id="zmmtg-root"></div>
+      <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen bg-black/80"></div>
     </div>
   );
 }
