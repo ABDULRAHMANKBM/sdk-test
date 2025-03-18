@@ -14,7 +14,7 @@ export default function ZoomComponent() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState<number | null>(null);
   const [error, setError] = useState("");
-  const [isMeetingActive, setIsMeetingActive] = useState(false); // Control visibility
+  const [isMeetingActive, setIsMeetingActive] = useState(false);
 
   const handleJoin = async () => {
     if (!email || !username) {
@@ -22,7 +22,6 @@ export default function ZoomComponent() {
       return;
     }
 
-    // Determine role based on email
     const userRole = determineRole(email);
     setRole(userRole);
 
@@ -33,7 +32,6 @@ export default function ZoomComponent() {
 
     setError("");
 
-    // Dynamically import Zoom SDK and start meeting
     const { ZoomMtg } = await import("@zoom/meetingsdk");
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
@@ -65,15 +63,15 @@ export default function ZoomComponent() {
             sdkKey: sdkKey,
             success: () => {
               console.log("Join meeting success");
-              setIsMeetingActive(true); // Show meeting
+              setIsMeetingActive(true);
             },
-            error: (err) => {
+            error: (err: unknown) => {  // Explicitly typed `err`
               console.error("Error joining meeting", err);
               setError("Failed to join the meeting.");
             },
           });
         },
-        error: (err) => {
+        error: (err: unknown) => {  // Explicitly typed `err`
           console.error("Error initializing Zoom SDK", err);
           setError("Failed to initialize Zoom SDK.");
         },
