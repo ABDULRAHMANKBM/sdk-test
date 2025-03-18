@@ -55,28 +55,28 @@ export default function ZoomComponent() {
     const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
       ZoomMtg.init({
         leaveUrl: leaveUrl,
-        showMeetingHeader: true, // Display the meeting header (for audio, video, etc.)
-        isSupportAV: true, // Enable audio and video
-        screenShare: true, // Allow screen sharing
-        videoDrag: true, // Allow moving video windows
-        sharingMode: "both", // Support both screen and content sharing
-        videoHeader: true, // Show video options in the header
-        isLockBottom: false, // Unlock the bottom bar
-        showPureSharingContent: true, // Disable pure content sharing
-        isSupportChat: true, // Enable chat panel
-        isSupportQA: false, // Disable Q&A (for webinars only)
-        isSupportPolling: true, // Enable polling feature
-        isSupportBreakout: true, // Enable breakout rooms
-        isSupportNonverbal: true, // Allow non-verbal feedback
-        audioPanelAlwaysOpen: false, // Audio panel should be closed by default
-        isShowJoiningErrorDialog: true, // Show errors if joining fails
-        disableRecord: false, // Allow recording
-        disableInvite: false, // Allow sending meeting invites
-        enableHD: true, // Enable high-definition video
-        isSupportCC: true, // Enable closed captioning
-        meetingInfo: ["topic", "host", "mn", "pwd", "telPwd", "invite", "participant"], // Show essential meeting info
-        inviteUrlFormat: "", // Keep default invite URL
-        externalLinkPage: "", // External link page (optional)
+        // showMeetingHeader: true, // Display the meeting header (for audio, video, etc.)
+        // isSupportAV: true, // Enable audio and video
+        // screenShare: true, // Allow screen sharing
+        // videoDrag: true, // Allow moving video windows
+        // sharingMode: "both", // Support both screen and content sharing
+        // videoHeader: true, // Show video options in the header
+        // isLockBottom: false, // Unlock the bottom bar
+        // showPureSharingContent: true, // Disable pure content sharing
+        // isSupportChat: true, // Enable chat panel
+        // isSupportQA: false, // Disable Q&A (for webinars only)
+        // isSupportPolling: true, // Enable polling feature
+        // isSupportBreakout: true, // Enable breakout rooms
+        // isSupportNonverbal: true, // Allow non-verbal feedback
+        // audioPanelAlwaysOpen: false, // Audio panel should be closed by default
+        // isShowJoiningErrorDialog: true, // Show errors if joining fails
+        // disableRecord: false, // Allow recording
+        // disableInvite: false, // Allow sending meeting invites
+        // enableHD: true, // Enable high-definition video
+        // isSupportCC: true, // Enable closed captioning
+        // meetingInfo: ["topic", "host", "mn", "pwd", "telPwd", "invite", "participant"], // Show essential meeting info
+        // inviteUrlFormat: "", // Keep default invite URL
+        // externalLinkPage: "", // External link page (optional)
 
         // SUCCESS Callback (properly placed here)
         success: () => {
