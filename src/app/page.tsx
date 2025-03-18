@@ -120,7 +120,7 @@ export default function ZoomComponent() {
 
       {/* Show Zoom Meeting only if isMeetingActive is true */}
       {isMeetingActive && (
-        <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen z-[9999] bg-black/80"></div>
+        <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen bg-black/80"></div>
       )}
     </div>
   );
