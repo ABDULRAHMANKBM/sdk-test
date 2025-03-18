@@ -14,6 +14,7 @@ export default function ZoomComponent() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [isMeetingActive, setIsMeetingActive] = useState(false); // Control visibility
 
   const handleJoin = async () => {
     if (!email || !username) {
@@ -55,48 +56,24 @@ export default function ZoomComponent() {
     const startMeeting = (ZoomMtg: typeof ZoomMtgType, signature: string) => {
       ZoomMtg.init({
         leaveUrl: leaveUrl,
-        // showMeetingHeader: true, // Display the meeting header (for audio, video, etc.)
-        // isSupportAV: true, // Enable audio and video
-        // screenShare: true, // Allow screen sharing
-        // videoDrag: true, // Allow moving video windows
-        // sharingMode: "both", // Support both screen and content sharing
-        // videoHeader: true, // Show video options in the header
-        // isLockBottom: false, // Unlock the bottom bar
-        // showPureSharingContent: true, // Disable pure content sharing
-        // isSupportChat: true, // Enable chat panel
-        // isSupportQA: false, // Disable Q&A (for webinars only)
-        // isSupportPolling: true, // Enable polling feature
-        // isSupportBreakout: true, // Enable breakout rooms
-        // isSupportNonverbal: true, // Allow non-verbal feedback
-        // audioPanelAlwaysOpen: false, // Audio panel should be closed by default
-        // isShowJoiningErrorDialog: true, // Show errors if joining fails
-        // disableRecord: false, // Allow recording
-        // disableInvite: false, // Allow sending meeting invites
-        // enableHD: true, // Enable high-definition video
-        // isSupportCC: true, // Enable closed captioning
-        // meetingInfo: ["topic", "host", "mn", "pwd", "telPwd", "invite", "participant"], // Show essential meeting info
-        // inviteUrlFormat: "", // Keep default invite URL
-        // externalLinkPage: "", // External link page (optional)
-
-        // SUCCESS Callback (properly placed here)
         success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
-            userName: username, // Use username instead of email as the display name
-            userEmail: email, // Add email for Zoom metadata
+            userName: username,
+            userEmail: email,
             signature: signature,
             sdkKey: sdkKey,
-            success: (res: unknown) => {
-              console.log("Join meeting success", res);
+            success: () => {
+              console.log("Join meeting success");
+              setIsMeetingActive(true); // Show meeting
             },
-            error: (err: unknown) => {
+            error: (err) => {
               console.error("Error joining meeting", err);
               setError("Failed to join the meeting.");
             },
           });
         },
-        // ERROR Callback
-        error: (err: unknown) => {
+        error: (err) => {
           console.error("Error initializing Zoom SDK", err);
           setError("Failed to initialize Zoom SDK.");
         },
@@ -107,11 +84,7 @@ export default function ZoomComponent() {
   };
 
   const determineRole = (email: string): number => {
-    // Host email logic
-    if (email === "abdulrahman.kbm02@gmail.com") {
-      return 1; // Host role
-    }
-    return 0; // Participant role
+    return email === "abdulrahman.kbm02@gmail.com" ? 1 : 0;
   };
 
   return (
@@ -125,7 +98,7 @@ export default function ZoomComponent() {
       >
         <div>
           <label htmlFor="username">Username:</label>
-        <input
+          <input
             type="text"
             id="username"
             value={username}
@@ -146,7 +119,11 @@ export default function ZoomComponent() {
         <button type="submit">Join Meeting</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen bg-black/80"></div>
+
+      {/* Show Zoom Meeting only if isMeetingActive is true */}
+      {isMeetingActive && (
+        <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen z-[9999] bg-black/80"></div>
+      )}
     </div>
   );
 }
