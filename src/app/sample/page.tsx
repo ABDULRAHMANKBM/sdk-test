@@ -1,5 +1,4 @@
-// pages/sample/page.tsx or src/app/sample/page.tsx
-
+"use client";
 import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
 
 function App() {
