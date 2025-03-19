@@ -120,7 +120,26 @@ export default function ZoomComponent() {
 
       {/* Show Zoom Meeting only if isMeetingActive is true */}
       {isMeetingActive && (
+      <>
+         <header
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            background: "#0073e6",
+            color: "white",
+            textAlign: "center",
+            padding: "10px",
+            fontSize: "18px",
+            fontWeight: "bold",
+            zIndex: 1000,
+          }}
+        >
+          You are in a Zoom Meeting
+        </header>
         <div id="zmmtg-root" className="fixed left-0 top-0 h-screen w-screen bg-black/80"></div>
+      </>
       )}
     </div>
   );
