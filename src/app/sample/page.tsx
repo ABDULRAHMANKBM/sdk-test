@@ -1,9 +1,21 @@
 "use client";
-import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
 
-function App() {
-  const client = ZoomMtgEmbedded.createClient();
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
+// Dynamically import the Zoom SDK (Component View) with SSR disabled
+const ZoomMtgEmbedded = dynamic(
+  () =>
+    import("@zoom/meetingsdk/embedded").then((mod) => mod.default),
+  { ssr: false }
+);
+
+export default function ZoomComponentView() {
+  const [client, setClient] = useState<any>(null);
+  const [isMeetingActive, setIsMeetingActive] = useState(false);
+  const [error, setError] = useState("");
+
+  // Replace these with your actual credentials and meeting details
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
   const meetingNumber = "89673134606";
@@ -11,60 +23,84 @@ function App() {
   const role = 0;
   const userName = "React Test";
   const userEmail = "kassar.abode@gmail.com";
+  // Initialize the Zoom client once on the client-side
+  useEffect(() => {
+    if (typeof window !== "undefined" && ZoomMtgEmbedded) {
+      const zoomClient = ZoomMtgEmbedded.createClient();
+      setClient(zoomClient);
+    }
+  }, []);
 
+  // Function to fetch the meeting signature from your backend
   const getSignature = async () => {
     try {
-      const req = await fetch(authEndpoint, {
+      const res = await fetch(authEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          meetingNumber: meetingNumber,
-          role: role,
-        }),
+        body: JSON.stringify({ meetingNumber, role }),
       });
-      const res = await req.json()
-      const signature = res.signature as string;
-      startMeeting(signature)
-    } catch (e) {
-      console.log(e);
+      const data = await res.json();
+      return data.signature as string;
+    } catch (error) {
+      console.error("Error fetching signature:", error);
+      setError("Failed to fetch signature.");
+      return null;
     }
   };
 
-  async function startMeeting(signature: string) {
-    const meetingSDKElement = document.getElementById("meetingSDKElement")!;
+  // Function to initialize and join the meeting
+  const joinMeeting = async () => {
+    if (!client) {
+      setError("Zoom Client not loaded.");
+      return;
+    }
+    const signature = await getSignature();
+    if (!signature) return;
+    const meetingSDKElement = document.getElementById("meetingSDKElement");
     try {
       await client.init({
-        zoomAppRoot: meetingSDKElement,
+        zoomAppRoot: meetingSDKElement!,
         language: "en-US",
         patchJsMedia: true,
         leaveOnPageUnload: true,
-      })
+      });
       await client.join({
-        signature: signature,
-        sdkKey: sdkKey,
-        meetingNumber: meetingNumber,
+        signature,
+        sdkKey,
+        meetingNumber,
         password: passWord,
-        userName: userName,
-        userEmail: userEmail
-      })
-      console.log("joined successfully");
+        userName,
+        userEmail,
+      });
+      setIsMeetingActive(true);
+      console.log("Joined meeting successfully");
     } catch (error) {
-      console.log(error);
+      console.error("Error joining meeting:", error);
+      setError("Error joining meeting.");
     }
-  }
+  };
 
   return (
-    <div className="App">
-      <main>
-        <h1>Zoom Meeting SDK Sample React</h1>
-        {/* For Component View */}
-        <div id="meetingSDKElement">
-          {/* Zoom Meeting SDK Component View Rendered Here */}
-        </div>
-        <button onClick={getSignature}>Join Meeting</button>
-      </main>
+    <div className="container mx-auto text-center py-10">
+      <h1 className="text-2xl font-bold mb-4">
+        Next.js Zoom Meeting SDK Component View
+      </h1>
+      {!isMeetingActive && (
+        <button
+          onClick={joinMeeting}
+          className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500"
+        >
+          Join Meeting
+        </button>
+      )}
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      <div
+        id="meetingSDKElement"
+        className="mt-8 border rounded-lg shadow-lg"
+        style={{ width: "800px", height: "600px", margin: "0 auto" }}
+      >
+        {/* The Zoom meeting component view will be rendered here */}
+      </div>
     </div>
   );
 }
-
-export default App;
