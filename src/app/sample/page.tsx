@@ -1,19 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 
-// Dynamically import the Zoom SDK (Component View) with SSR disabled
-const ZoomMtgEmbedded = dynamic(
-  () =>
-    import("@zoom/meetingsdk/embedded").then((mod) => mod.default),
-  { ssr: false }
-);
-
-export default function ZoomComponentView() {
+export default function SamplePage() {
   const [client, setClient] = useState<any>(null);
-  const [isMeetingActive, setIsMeetingActive] = useState(false);
   const [error, setError] = useState("");
+  const [isMeetingActive, setIsMeetingActive] = useState(false);
 
   // Replace these with your actual credentials and meeting details
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
@@ -23,11 +15,20 @@ export default function ZoomComponentView() {
   const role = 0;
   const userName = "React Test";
   const userEmail = "kassar.abode@gmail.com";
-  // Initialize the Zoom client once on the client-side
+  // Dynamically import the Zoom SDK only on the client-side
   useEffect(() => {
-    if (typeof window !== "undefined" && ZoomMtgEmbedded) {
-      const zoomClient = ZoomMtgEmbedded.createClient();
-      setClient(zoomClient);
+    if (typeof window !== "undefined") {
+      import("@zoom/meetingsdk/embedded")
+        .then((module) => {
+          // The SDK is exported as the default export
+          const ZoomMtgEmbedded = module.default;
+          const zoomClient = ZoomMtgEmbedded.createClient();
+          setClient(zoomClient);
+        })
+        .catch((err) => {
+          console.error("Error loading Zoom SDK:", err);
+          setError("Error loading Zoom SDK");
+        });
     }
   }, []);
 
@@ -41,9 +42,9 @@ export default function ZoomComponentView() {
       });
       const data = await res.json();
       return data.signature as string;
-    } catch (error) {
-      console.error("Error fetching signature:", error);
-      setError("Failed to fetch signature.");
+    } catch (err) {
+      console.error("Error fetching signature", err);
+      setError("Error fetching signature");
       return null;
     }
   };
@@ -51,11 +52,14 @@ export default function ZoomComponentView() {
   // Function to initialize and join the meeting
   const joinMeeting = async () => {
     if (!client) {
-      setError("Zoom Client not loaded.");
+      setError("Zoom client not loaded");
       return;
     }
     const signature = await getSignature();
-    if (!signature) return;
+    if (!signature) {
+      setError("No signature returned");
+      return;
+    }
     const meetingSDKElement = document.getElementById("meetingSDKElement");
     try {
       await client.init({
@@ -74,9 +78,9 @@ export default function ZoomComponentView() {
       });
       setIsMeetingActive(true);
       console.log("Joined meeting successfully");
-    } catch (error) {
-      console.error("Error joining meeting:", error);
-      setError("Error joining meeting.");
+    } catch (err) {
+      console.error("Error joining meeting", err);
+      setError("Error joining meeting");
     }
   };
 
@@ -98,9 +102,7 @@ export default function ZoomComponentView() {
         id="meetingSDKElement"
         className="mt-8 border rounded-lg shadow-lg"
         style={{ width: "800px", height: "600px", margin: "0 auto" }}
-      >
-        {/* The Zoom meeting component view will be rendered here */}
-      </div>
+      ></div>
     </div>
   );
 }
