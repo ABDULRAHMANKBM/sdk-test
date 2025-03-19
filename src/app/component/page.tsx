@@ -1,19 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const ZoomMtgEmbedded = dynamic(() => import("@zoom/meetingsdk/embedded"), { ssr: false });
 
 export default function ZoomComponentView() {
-  const client = ZoomMtgEmbedded.createClient();
+  const [client, setClient] = useState<any | null>(null);
+  const [isMeetingActive, setIsMeetingActive] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
   const meetingNumber = "89673134606";
   const passWord = "0Se1T3";
-  const role = 0; // 0 for attendee, 1 for host
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [isMeetingActive, setIsMeetingActive] = useState(false);
+  const role = 0; // 0 for attendees, 1 for hosts
+
+  // Initialize Zoom client only on the client-side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const zoomClient = ZoomMtgEmbedded.createClient();
+      setClient(zoomClient);
+    }
+  }, []);
 
   const getSignature = async () => {
     if (!email || !username) {
@@ -36,9 +47,10 @@ export default function ZoomComponentView() {
     }
   };
 
-  async function startMeeting(signature: string) {
+  const startMeeting = async (signature: string) => {
+    if (!client) return;
+
     const meetingSDKElement = document.getElementById("meetingSDKElement")!;
-    
     try {
       await client.init({
         zoomAppRoot: meetingSDKElement,
@@ -62,7 +74,7 @@ export default function ZoomComponentView() {
       console.error("Error joining meeting", error);
       setError("Failed to join the meeting.");
     }
-  }
+  };
 
   return (
     <div className="App">
@@ -101,7 +113,7 @@ export default function ZoomComponentView() {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Zoom Component View with Fixed Size */}
+      {/* Fixed Size Zoom Component View */}
       {isMeetingActive && (
         <div
           id="meetingSDKElement"
