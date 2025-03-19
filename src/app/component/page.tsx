@@ -1,9 +1,6 @@
-"use client";
+"use client"; // Ensure this runs only on the client-side
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-
-const ZoomMtgEmbedded = dynamic(() => import("@zoom/meetingsdk/embedded"), { ssr: false });
 
 export default function ZoomComponentView() {
   const [client, setClient] = useState<any | null>(null);
@@ -18,11 +15,12 @@ export default function ZoomComponentView() {
   const passWord = "0Se1T3";
   const role = 0; // 0 for attendees, 1 for hosts
 
-  // Initialize Zoom client only on the client-side
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const zoomClient = ZoomMtgEmbedded.createClient();
-      setClient(zoomClient);
+      import("@zoom/meetingsdk/embedded").then((ZoomMtgEmbedded) => {
+        const zoomClient = ZoomMtgEmbedded.default.createClient();
+        setClient(zoomClient);
+      });
     }
   }, []);
 
