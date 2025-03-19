@@ -75,9 +75,15 @@ export default function ZoomComponentView() {
       setIsMeetingActive(true);
       console.log("Joined successfully");
     } catch (error) {
-      console.error("Error joining meeting", error);
-      setError(`Failed to join the meeting: ${error.message || error}`);
-    }
+        console.error("Error joining meeting", error);
+      
+        // Ensure error is an instance of Error
+        if (error instanceof Error) {
+          setError(`Failed to join the meeting: ${error.message}`);
+        } else {
+          setError(`Failed to join the meeting: ${String(error)}`);
+        }
+      }
   };
   
 
