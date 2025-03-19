@@ -239,7 +239,6 @@
 
 
 // full dimensions
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -361,7 +360,8 @@ export default function SamplePage() {
       )}
       <div
         id="meetingSDKElement"
-        className="mt-8 border rounded-lg shadow-lg"
+        className="mt-8 border rounded-lg shadow-lg overflow-hidden"
+        style={{ width: "1000px", height: "700px", margin: "0 auto", position: "relative" }}
       ></div>
     </div>
   );

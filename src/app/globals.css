@@ -36,19 +36,24 @@ body {
   }
 }
 
-/* globals.css */
-
 #meetingSDKElement {
-  width: 800px;
-  height: 600px;
+  width: 1000px;
+  height: 700px;
   margin: 0 auto;
-  overflow: hidden; /* Hide any overflow */
-  position: relative; /* Ensure absolutely positioned children are contained */
+  overflow: hidden;
+  position: relative;
 }
 
-/* Force all direct children of the meeting container to fill the container */
-#meetingSDKElement > * {
-  width: 100% !important;
-  height: 100% !important;
+/* Override styles for Zoom overlays (adjust selectors as needed) */
+#meetingSDKElement .zmmtg-chat,
+#meetingSDKElement .zmmtg-people,
+#meetingSDKElement .zmmtg-panel {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  overflow: auto;
   box-sizing: border-box;
 }
