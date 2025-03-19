@@ -46,17 +46,23 @@ export default function ZoomComponentView() {
   };
 
   const startMeeting = async (signature: string) => {
-    if (!client) return;
-
+    if (!client) {
+      console.error("Zoom Client is not initialized!");
+      setError("Zoom Client is not initialized.");
+      return;
+    }
+  
     const meetingSDKElement = document.getElementById("meetingSDKElement")!;
     try {
+      console.log("Initializing Zoom SDK...");
       await client.init({
         zoomAppRoot: meetingSDKElement,
         language: "en-US",
         patchJsMedia: true,
         leaveOnPageUnload: true,
       });
-
+  
+      console.log("Joining Meeting...");
       await client.join({
         signature,
         sdkKey,
@@ -65,14 +71,15 @@ export default function ZoomComponentView() {
         userName: username,
         userEmail: email,
       });
-
+  
       setIsMeetingActive(true);
       console.log("Joined successfully");
     } catch (error) {
       console.error("Error joining meeting", error);
-      setError("Failed to join the meeting.");
+      setError(`Failed to join the meeting: ${error.message || error}`);
     }
   };
+  
 
   return (
     <div className="App">
