@@ -1,4 +1,5 @@
-import "./App.css";
+// pages/sample/page.tsx or src/app/sample/page.tsx
+
 import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
 
 function App() {
@@ -11,8 +12,6 @@ function App() {
   const role = 0;
   const userName = "React Test";
   const userEmail = "kassar.abode@gmail.com";
-//   const registrantToken = "";
-//   const zakToken = "";
 
   const getSignature = async () => {
     try {
@@ -24,9 +23,9 @@ function App() {
           role: role,
         }),
       });
-      const res = await req.json()
+      const res = await req.json();
       const signature = res.signature as string;
-      startMeeting(signature)
+      startMeeting(signature);
     } catch (e) {
       console.log(e);
     }
@@ -40,7 +39,7 @@ function App() {
         language: "en-US",
         patchJsMedia: true,
         leaveOnPageUnload: true,
-      })
+      });
       await client.join({
         signature: signature,
         sdkKey: sdkKey,
@@ -48,7 +47,7 @@ function App() {
         password: passWord,
         userName: userName,
         userEmail: userEmail
-      })
+      });
       console.log("joined successfully");
     } catch (error) {
       console.log(error);
@@ -57,13 +56,18 @@ function App() {
 
   return (
     <div className="App">
-      <main>
-        <h1>Zoom Meeting SDK Sample React</h1>
+      <main className="w-3/4 mx-auto text-center">
+        <h1 className="text-xl font-bold mb-6">Zoom Meeting SDK Sample React</h1>
         {/* For Component View */}
-        <div id="meetingSDKElement">
+        <div id="meetingSDKElement" className="border rounded-lg bg-white shadow-md">
           {/* Zoom Meeting SDK Component View Rendered Here */}
         </div>
-        <button onClick={getSignature}>Join Meeting</button>
+        <button
+          onClick={getSignature}
+          className="mt-5 bg-blue-600 text-white py-2 px-10 rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          Join Meeting
+        </button>
       </main>
     </div>
   );
