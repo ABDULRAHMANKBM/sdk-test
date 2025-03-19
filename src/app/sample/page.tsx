@@ -1,14 +1,14 @@
 "use client";  // Ensure this is a client-side component
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import the Zoom SDK with SSR disabled
-const ZoomMtgEmbedded = dynamic(() => import("@zoom/meetingsdk/embedded"), { ssr: false });
+const ZoomMtgEmbedded = dynamic(() => import("@zoom/meetingsdk/embedded").then((mod) => mod.default), { ssr: false });
 
 const SamplePage = () => {
-  const client = ZoomMtgEmbedded.createClient();
-
+  const [client, setClient] = useState(null);
+  
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
   const meetingNumber = "89673134606";
@@ -18,16 +18,24 @@ const SamplePage = () => {
   const userEmail = "kassar.abode@gmail.com";
 
   useEffect(() => {
-    // Ensure client-side execution
+    if (ZoomMtgEmbedded) {
+      const clientInstance = ZoomMtgEmbedded.createClient();
+      setClient(clientInstance);
+    }
+  }, []);
+
+  useEffect(() => {
     const initMeeting = async () => {
-      const signature = await getSignature();
-      if (signature) {
-        await startMeeting(signature);
+      if (client) {
+        const signature = await getSignature();
+        if (signature) {
+          await startMeeting(signature);
+        }
       }
     };
 
     initMeeting();
-  }, []);
+  }, [client]);
 
   const getSignature = async () => {
     try {
