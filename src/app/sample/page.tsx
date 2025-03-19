@@ -118,14 +118,14 @@ export default function SamplePage() {
   const [isMeetingActive, setIsMeetingActive] = useState(false);
 
   // Replace these with your actual credentials and meeting details
-  const sdkKey = "YOUR_SDK_KEY";
-  const meetingNumber = "YOUR_MEETING_NUMBER";
-  const passWord = "YOUR_MEETING_PASSWORD";
-  const role = 0; // 0 for attendee, 1 for host
-  const userName = "Next.js User";
-  const userEmail = "user@example.com";
-  const authEndpoint = "http://localhost:4000/generate-signature"; // Your backend endpoint
-
+  const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
+  const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
+  const meetingNumber = "89673134606";
+  const passWord = "0Se1T3";
+  const role = 0;
+  const userName = "React Test";
+  const userEmail = "kassar.abode@gmail.com";
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       import("@zoom/meetingsdk/embedded")
