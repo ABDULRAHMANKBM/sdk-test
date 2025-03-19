@@ -1,7 +1,12 @@
-"use client";
-import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
+"use client";  // Ensure this is a client-side component
 
-function App() {
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import the Zoom SDK with SSR disabled
+const ZoomMtgEmbedded = dynamic(() => import("@zoom/meetingsdk/embedded"), { ssr: false });
+
+const SamplePage = () => {
   const client = ZoomMtgEmbedded.createClient();
 
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
@@ -11,6 +16,18 @@ function App() {
   const role = 0;
   const userName = "React Test";
   const userEmail = "kassar.abode@gmail.com";
+
+  useEffect(() => {
+    // Ensure client-side execution
+    const initMeeting = async () => {
+      const signature = await getSignature();
+      if (signature) {
+        await startMeeting(signature);
+      }
+    };
+
+    initMeeting();
+  }, []);
 
   const getSignature = async () => {
     try {
@@ -23,10 +40,10 @@ function App() {
         }),
       });
       const res = await req.json();
-      const signature = res.signature as string;
-      startMeeting(signature);
+      return res.signature as string;
     } catch (e) {
       console.log(e);
+      return null;
     }
   };
 
@@ -55,21 +72,16 @@ function App() {
 
   return (
     <div className="App">
-      <main className="w-3/4 mx-auto text-center">
-        <h1 className="text-xl font-bold mb-6">Zoom Meeting SDK Sample React</h1>
+      <main>
+        <h1>Zoom Meeting SDK Sample Next.js</h1>
         {/* For Component View */}
-        <div id="meetingSDKElement" className="border rounded-lg bg-white shadow-md">
+        <div id="meetingSDKElement">
           {/* Zoom Meeting SDK Component View Rendered Here */}
         </div>
-        <button
-          onClick={getSignature}
-          className="mt-5 bg-blue-600 text-white py-2 px-10 rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Join Meeting
-        </button>
+        <button onClick={() => getSignature()}>Join Meeting</button>
       </main>
     </div>
   );
-}
+};
 
-export default App;
+export default SamplePage;
