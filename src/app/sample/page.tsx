@@ -437,9 +437,27 @@ export default function SamplePage() {
         // The customize object below attempts to force the chat, invite, and participants 
         // panels to render inline within the meeting container instead of as popups.
         customize: {
+          video: {
+            isResizable: true, // Allow users to resize the video container
+            viewSizes: {
+              default: { width: 800, height: 600 }, // Default view size
+              ribbon: { width: 1200, height: 150 },  // Ribbon view size
+            },
+          },
           toolbar: {
-            // Optionally customize toolbar buttons here
-            buttons: []
+            buttons: [
+              {
+                text: "Toggle Full Screen",
+                className: "CustomButton",
+                onClick: () => {
+                  if (!document.fullscreenElement) {
+                    meetingSDKElement?.requestFullscreen();
+                  } else {
+                    document.exitFullscreen();
+                  }
+                },
+              },
+            ],
           },
           chat: {
             popper: false, // Render chat inside the container
