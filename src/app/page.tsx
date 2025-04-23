@@ -6,8 +6,8 @@ import type { ZoomMtg as ZoomMtgType } from "@zoom/meetingsdk";
 export default function ZoomComponent() {
   const authEndpoint = "https://sdk-backend.onrender.com/signature/generate-signature";
   const sdkKey = "pveTfB7SSbKO9aYuK5hWBw";
-  const meetingNumber = "89673134606";
-  const passWord = "0Se1T3";
+  const meetingNumber = "87017721590";
+  const passWord = "EsJYD2";
   const leaveUrl = "https://www.zoom.com/";
 
   const [email, setEmail] = useState("");
@@ -57,6 +57,7 @@ export default function ZoomComponent() {
         success: () => {
           ZoomMtg.join({
             meetingNumber: meetingNumber,
+            passWord: passWord,
             userName: username,
             userEmail: email,
             signature: signature,
